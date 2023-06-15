@@ -1,14 +1,24 @@
+#include <TinyGPS++.h>
+#include <SoftwareSerial.h>
 #include <DHT.h>
 #include <U8g2lib.h>
 #include <SPL06-007.h>
 #include <Wire.h>
 #include <U8x8lib.h>
 
+
 // variables that store ascii formatted data 
 // which gets written to the lcd
 const char DEGREE_SYMBOL[] = { 0xB0, '\0' };
 char lcd_dht_temperature [5];
 char lcd_dht_humidity [5];
+
+// gps stuff
+//
+static const int RXPin = 4, TXPin = 3;
+static const uint32_t GPSBaud = 9600;
+TinyGPSPlus gps;
+SoftwareSerial ss(RXPin, TXPin);
 
 #define DHTTYPE    DHT11
 DHT dht(7, DHTTYPE);
@@ -49,7 +59,13 @@ void setup_pressure() {
   SPL_init(); // Setup initial SPL chip registers   
 }
 void setup_gps() {
-  // todo
+//  Serial.begin(9600);
+      ss.begin(GPSBaud);
+      // Serial.println(F("DeviceExample.ino"));
+      // Serial.println(F("A simple demonstration of TinyGPS++ with an attached GPS module"));
+      // Serial.print(F("Testing TinyGPS++ library v. ")); Serial.println(TinyGPSPlus::libraryVersion());
+      // Serial.println(F("by Mikal Hart"));
+      // Serial.println();
 }
 
 // logic to write the device data to the attached lcd
@@ -99,11 +115,11 @@ void lcd_read_spl06() {
 // logic to write the device data in CSV format to the serial port
 //
 void write_serial() {
-  write_dht_serial();
-  write_gps_serial();
-  write_spl06_serial();
+  // write_dht_serial();
+    write_gps_serial();
+  // write_spl06_serial();
 
-  Serial.println();
+  // Serial.println();
 }
 
 void write_dht_serial() {
@@ -117,6 +133,51 @@ void write_dht_serial() {
 }
 void write_gps_serial() {
   // todo
+
+  Serial.print(F("Location: ")); 
+      if (gps.location.isValid())
+      {
+        Serial.print(gps.location.lat(), 6);
+        Serial.print(F(","));
+        Serial.print(gps.location.lng(), 6);
+      }
+      else
+      {
+        Serial.print(F("INVALID"));
+      }
+      Serial.print(F("  Date/Time: "));
+      if (gps.date.isValid())
+      {
+        Serial.print(gps.date.month());
+        Serial.print(F("/"));
+        Serial.print(gps.date.day());
+        Serial.print(F("/"));
+        Serial.print(gps.date.year());
+      }
+      else
+      {
+        Serial.print(F("INVALID"));
+      }
+      Serial.print(F(" "));
+      if (gps.time.isValid())
+      {
+        if (gps.time.hour() < 10) Serial.print(F("0"));
+        Serial.print(gps.time.hour());
+        Serial.print(F(":"));
+        if (gps.time.minute() < 10) Serial.print(F("0"));
+        Serial.print(gps.time.minute());
+        Serial.print(F(":"));
+        if (gps.time.second() < 10) Serial.print(F("0"));
+        Serial.print(gps.time.second());
+        Serial.print(F("."));
+        if (gps.time.centisecond() < 10) Serial.print(F("0"));
+        Serial.print(gps.time.centisecond());
+      }
+      else
+      {
+        Serial.print(F("INVALID"));
+      }
+      Serial.println();
 }
 void write_spl06_serial() {
   // todo
