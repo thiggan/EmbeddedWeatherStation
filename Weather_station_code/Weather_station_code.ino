@@ -128,7 +128,7 @@ void write_serial()
   //  write_gps_serial();
    write_spl06_serial();
 
-  // Serial.println();
+  Serial.println();
 }
 
 void write_dht_serial()
@@ -174,86 +174,23 @@ void write_gps_serial_O()
 }
 void write_spl06_serial()
 {
-  // todo
-
-  // // ---- Register Values ----------------
-  // Serial.print("ID: ");
-  // Serial.println(get_spl_id());
-  // Serial.print("PRS_CFG: ");
-  // Serial.println(get_spl_prs_cfg(),BIN);
-  // Serial.print("TMP_CFG: ");
-  // Serial.println(get_spl_tmp_cfg(),BIN);
-  // Serial.print("MEAS_CFG: ");
-  // Serial.println(get_spl_meas_cfg(),BIN);
-  // Serial.print("CFG_REG: ");
-  // Serial.println(get_spl_cfg_reg(),BIN);
-  // Serial.print("INT_STS: ");
-  // Serial.println(get_spl_int_sts(),BIN);
-  // Serial.print("FIFO_STS: ");
-  // Serial.println(get_spl_fifo_sts(),BIN);
-
-  // // ---- Coefficients ----------------
-  // Serial.print("c0: ");
-  // Serial.println(get_c0());
-  // Serial.print("c1: ");
-  // Serial.println(get_c1());
-  // Serial.print("c00: ");
-  // Serial.println(get_c00());
-  // Serial.print("c10: ");
-  // Serial.println(get_c10());
-  // Serial.print("c01: ");
-  // Serial.println(get_c01());
-  // Serial.print("c11: ");
-  // Serial.println(get_c11());
-
-  // Serial.print("c20: ");
-  // Serial.println(get_c20());
-
-  // Serial.print("c21: ");
-  // Serial.println(get_c21());
-  // Serial.print("c30: ");
-  // Serial.println(get_c30());
-
   // ---- Temperature Values ----------------
-  Serial.print("traw: ");
-  Serial.println(get_traw());
-  Serial.print("traw_sc: ");
-  Serial.println(get_traw_sc(),3);
 
-  Serial.print("Temperature: ");
+  //Serial.print("Temperature C");
   Serial.print(get_temp_c());
-  Serial.println(" C");
+  Serial.print(",");
 
-  Serial.print("Temperature: ");
+  //Serial.print("Temperature F");
   Serial.print(get_temp_f());
-  Serial.println(" F");
+  Serial.print(",");
 
   // ---- Pressure Values ----------------
-  // Serial.print("praw: ");
-  // Serial.println(get_praw());
+  
+  //Serial.print("Measured Air Pressure");
+  Serial.print(get_pressure());
+  Serial.print(",");
+  //Serial.println(" mb");
 
-  // Serial.print("praw_sc: ");
-  // Serial.println(get_praw_sc(),3);
-  // Serial.print("pcomp: ");
-  // Serial.println(get_pcomp(),2);
-  Serial.print("Measured Air Pressure: ");
-  Serial.print(get_pressure(),2);
-  Serial.println(" mb");
-
-  // ---- Altitude Values ----------------
-  // double local_pressure = 1029; // Look up local sea level pressure on google // Local pressure from airport website 8/22
-  // Serial.print("Local Airport Sea Level Pressure: ");
-  // Serial.print(local_pressure,2);
-  // Serial.println(" mb");
-
-  // Serial.print("altitude: ");
-  // Serial.print(get_altitude(get_pressure(),local_pressure),1);
-  // Serial.println(" m");
-  // Serial.print("altitude: ");
-  // Serial.print(get_altitude_f(get_pressure(),local_pressure),1); // convert from meters to feet
-  // Serial.println(" ft");
-
-  // Serial.println("\n");
 }
 
 // borrowed from https://github.com/mikalhart/TinyGPSPlus/blob/master/examples/FullExample/FullExample.ino
