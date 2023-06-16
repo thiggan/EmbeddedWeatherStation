@@ -124,9 +124,11 @@ void lcd_read_spl06()
 //
 void write_serial()
 {
+
+
    write_dht_serial();
-  //  write_gps_serial();
-   write_spl06_serial();
+   write_gps_serial();
+   //write_spl06_serial();
 
   Serial.println();
 }
@@ -158,18 +160,28 @@ void write_gps_serial()
 }
 void write_gps_serial_O()
 {
-  printInt(gps.satellites.value(), gps.satellites.isValid(), 5);
-  printFloat(gps.hdop.hdop(), gps.hdop.isValid(), 6, 1);
-  printFloat(gps.location.lat(), gps.location.isValid(), 11, 6);
-  printFloat(gps.location.lng(), gps.location.isValid(), 12, 6);
-  printInt(gps.location.age(), gps.location.isValid(), 5);
-  printDateTime(gps.date, gps.time);
-  printFloat(gps.altitude.meters(), gps.altitude.isValid(), 7, 2);
-  printFloat(gps.course.deg(), gps.course.isValid(), 7, 2);
-  printFloat(gps.speed.kmph(), gps.speed.isValid(), 6, 2);
-  printStr(gps.course.isValid() ? TinyGPSPlus::cardinal(gps.course.deg()) : "*** ", 6);
+  printInt2(gps.satellites.value(), gps.satellites.isValid());
+  Serial.print(",");
+  printFloat2(gps.hdop.hdop(), gps.hdop.isValid(), 1);
+  Serial.print(",");
+  printFloat2(gps.location.lat(), gps.location.isValid(), 6);
+  Serial.print(",");
+  printFloat2(gps.location.lng(), gps.location.isValid(), 6);
+  Serial.print(",");
+  // printInt2(gps.location.age(), gps.location.isValid());
+  // Serial.print(",");
+  // printDateTime(gps.date, gps.time);
+  // Serial.print(",");
+  // printFloat2(gps.altitude.meters(), gps.altitude.isValid(), 2);
+  // Serial.print(",");
+  // printFloat2(gps.course.deg(), gps.course.isValid(), 2);
+  // Serial.print(",");
+  // printFloat2(gps.speed.kmph(), gps.speed.isValid(), 2);
+  // Serial.print(",");
+  // printStr2(gps.course.isValid() ? TinyGPSPlus::cardinal(gps.course.deg()) : "", 1);
+  // Serial.print("");
 
-  Serial.println();
+  //Serial.println();
   smartDelay(500);
 }
 void write_spl06_serial()
@@ -228,6 +240,20 @@ static void printFloat(float val, bool valid, int len, int prec)
   smartDelay(0);
 }
 
+// used chatgpt to rewrite this so it doenst pad
+static void printFloat2(float val, bool valid, int prec)
+{
+  if (!valid)
+  {
+    Serial.print("");
+  }
+  else
+  {
+    Serial.print(val, prec);
+  }
+  smartDelay(0);
+}
+
 static void printInt(unsigned long val, bool valid, int len)
 {
   char sz[32] = "*****************";
@@ -242,22 +268,35 @@ static void printInt(unsigned long val, bool valid, int len)
   smartDelay(0);
 }
 
+// using chatgpt to change this so it doesnt pad
+static void printInt2(unsigned long val, bool valid)
+{
+  char sz[32];
+  if (valid)
+    sprintf(sz, "%lu", val);
+  else
+    sprintf(sz, "");
+  Serial.print(sz);
+  smartDelay(0);
+}
+
 static void printDateTime(TinyGPSDate &d, TinyGPSTime &t)
 {
   if (!d.isValid())
   {
-    Serial.print(F("********** "));
+    Serial.print(F(""));
   }
   else
   {
     char sz[32];
-    sprintf(sz, "%02d/%02d/%02d ", d.month(), d.day(), d.year());
+    // sprintf(sz, "%02d/%02d/%02d ", d.month(), d.day(), d.year());
+    sprintf(sz, "%02d-%02d-%02d ", d.year(), d.month(), d.day());
     Serial.print(sz);
   }
   
   if (!t.isValid())
   {
-    Serial.print(F("******** "));
+    Serial.print(F(""));
   }
   else
   {
@@ -270,10 +309,20 @@ static void printDateTime(TinyGPSDate &d, TinyGPSTime &t)
   smartDelay(0);
 }
 
+// the origonal version
 static void printStr(const char *str, int len)
 {
   int slen = strlen(str);
   for (int i=0; i<len; ++i)
     Serial.print(i<slen ? str[i] : ' ');
+  smartDelay(0);
+}
+
+// using chat gpt to rewrite this so it doesnt padd
+static void printStr2(const char *str, int len)
+{
+  int slen = strlen(str);
+  for (int i = 0; i < slen && i < len; ++i)
+    Serial.print(str[i]);
   smartDelay(0);
 }
