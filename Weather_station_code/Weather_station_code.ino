@@ -28,16 +28,16 @@ void setup()
 {
   Serial.begin(9600);
 
-  // setup_lcd();
-  // setup_dht();
-  // setup_pressure();
-  setup_gps();
+    setup_lcd();
+    setup_dht();
+    setup_pressure();
+    setup_gps();
 }
 
 void loop()
 {
-  // write_lcd();
-  write_serial();
+   write_lcd();
+   write_serial();
 }
 
 // code to setup the various devices
@@ -82,8 +82,8 @@ void write_lcd()
     lcd_read_gps();
     lcd_read_spl06();
 
-    // u8g2.drawFrame(0,0,128,31);
-    // u8g2.drawFrame(0,33,128,31);
+    u8g2.drawFrame(0,0,128,31);
+    u8g2.drawFrame(0,33,128,31);
 
     // temperature
     u8g2.drawStr(15, 13, "Temperature");
@@ -124,9 +124,9 @@ void lcd_read_spl06()
 //
 void write_serial()
 {
-  // write_dht_serial();
-  write_gps_serial();
-  // write_spl06_serial();
+   write_dht_serial();
+  //  write_gps_serial();
+   write_spl06_serial();
 
   // Serial.println();
 }
@@ -214,21 +214,21 @@ void write_spl06_serial()
   // Serial.print("c30: ");
   // Serial.println(get_c30());
 
-  // // ---- Temperature Values ----------------
-  // Serial.print("traw: ");
-  // Serial.println(get_traw());
-  // Serial.print("traw_sc: ");
-  // Serial.println(get_traw_sc(),3);
+  // ---- Temperature Values ----------------
+  Serial.print("traw: ");
+  Serial.println(get_traw());
+  Serial.print("traw_sc: ");
+  Serial.println(get_traw_sc(),3);
 
-  // Serial.print("Temperature: ");
-  // Serial.print(get_temp_c());
-  // Serial.println(" C");
+  Serial.print("Temperature: ");
+  Serial.print(get_temp_c());
+  Serial.println(" C");
 
-  // Serial.print("Temperature: ");
-  // Serial.print(get_temp_f());
-  // Serial.println(" F");
+  Serial.print("Temperature: ");
+  Serial.print(get_temp_f());
+  Serial.println(" F");
 
-  // // ---- Pressure Values ----------------
+  // ---- Pressure Values ----------------
   // Serial.print("praw: ");
   // Serial.println(get_praw());
 
@@ -236,11 +236,11 @@ void write_spl06_serial()
   // Serial.println(get_praw_sc(),3);
   // Serial.print("pcomp: ");
   // Serial.println(get_pcomp(),2);
-  // Serial.print("Measured Air Pressure: ");
-  // Serial.print(get_pressure(),2);
-  // Serial.println(" mb");
+  Serial.print("Measured Air Pressure: ");
+  Serial.print(get_pressure(),2);
+  Serial.println(" mb");
 
-  // // ---- Altitude Values ----------------
+  // ---- Altitude Values ----------------
   // double local_pressure = 1029; // Look up local sea level pressure on google // Local pressure from airport website 8/22
   // Serial.print("Local Airport Sea Level Pressure: ");
   // Serial.print(local_pressure,2);
