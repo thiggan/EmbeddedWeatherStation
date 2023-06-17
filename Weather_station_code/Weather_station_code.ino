@@ -165,14 +165,14 @@ void write_gps_serial()
   // Serial.print(",");
   printDateTime(gps.date, gps.time);
   Serial.print(",");
-  // printFloat2(gps.altitude.meters(), gps.altitude.isValid(), 2);
-  // Serial.print(",");
-  // printFloat2(gps.course.deg(), gps.course.isValid(), 2);
-  // Serial.print(",");
-  // printFloat2(gps.speed.kmph(), gps.speed.isValid(), 2);
-  // Serial.print(",");
-  // printStr2(gps.course.isValid() ? TinyGPSPlus::cardinal(gps.course.deg()) : "", 1);
-  // Serial.print("");
+  printFloat2(gps.altitude.meters(), gps.altitude.isValid(), 2);
+  Serial.print(",");
+  printFloat2(gps.course.deg(), gps.course.isValid(), 2);
+  Serial.print(",");
+  printFloat2(gps.speed.kmph(), gps.speed.isValid(), 2);
+  Serial.print(",");
+  printStr2(gps.course.isValid() ? TinyGPSPlus::cardinal(gps.course.deg()) : "", 1);
+  Serial.print("");
 }
 void write_spl06_serial()
 {
