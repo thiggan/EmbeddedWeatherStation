@@ -121,16 +121,24 @@ void lcd_read_spl06()
 }
 
 // logic to write the device data in CSV format to the serial port
+// we only want to do this when we have gps data
 //
 void write_serial()
 {
-
-
-   write_dht_serial();
-   write_gps_serial();
-   //write_spl06_serial();
-
-  Serial.println();
+  while (ss.available() > 0)
+  {
+    if (gps.encode(ss.read()))
+    {
+      write_dht_serial();
+      write_gps_serial();
+      write_spl06_serial();
+      Serial.println();
+    }
+    if (millis() > 5000 && gps.charsProcessed() < 10)
+    {
+      Serial.println(F("No GPS detected: check wiring."));
+    }
+  }
 }
 
 void write_dht_serial()
@@ -145,21 +153,6 @@ void write_dht_serial()
 }
 void write_gps_serial()
 {
-  while (ss.available() > 0)
-  {
-    if (gps.encode(ss.read()))
-    {
-      write_gps_serial_O();
-    }
-    if (millis() > 5000 && gps.charsProcessed() < 10)
-    {
-      Serial.println(F("No GPS detected: check wiring."));
-      while(true);
-    }
-  }
-}
-void write_gps_serial_O()
-{
   printInt2(gps.satellites.value(), gps.satellites.isValid());
   Serial.print(",");
   printFloat2(gps.hdop.hdop(), gps.hdop.isValid(), 1);
@@ -170,8 +163,8 @@ void write_gps_serial_O()
   Serial.print(",");
   // printInt2(gps.location.age(), gps.location.isValid());
   // Serial.print(",");
-  // printDateTime(gps.date, gps.time);
-  // Serial.print(",");
+  printDateTime(gps.date, gps.time);
+  Serial.print(",");
   // printFloat2(gps.altitude.meters(), gps.altitude.isValid(), 2);
   // Serial.print(",");
   // printFloat2(gps.course.deg(), gps.course.isValid(), 2);
@@ -180,9 +173,6 @@ void write_gps_serial_O()
   // Serial.print(",");
   // printStr2(gps.course.isValid() ? TinyGPSPlus::cardinal(gps.course.deg()) : "", 1);
   // Serial.print("");
-
-  //Serial.println();
-  smartDelay(500);
 }
 void write_spl06_serial()
 {
@@ -301,11 +291,11 @@ static void printDateTime(TinyGPSDate &d, TinyGPSTime &t)
   else
   {
     char sz[32];
-    sprintf(sz, "%02d:%02d:%02d ", t.hour(), t.minute(), t.second());
+    sprintf(sz, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
     Serial.print(sz);
   }
 
-  printInt(d.age(), d.isValid(), 5);
+  //printInt2(d.age(), d.isValid());
   smartDelay(0);
 }
 
