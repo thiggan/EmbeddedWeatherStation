@@ -13,7 +13,7 @@ char lcd_dht_temperature[5];
 char lcd_dht_humidity[5];
 
 // gps stuff
-//
+
 static const int RXPin = 4, TXPin = 3;
 static const uint32_t GPSBaud = 9600;
 TinyGPSPlus gps;
